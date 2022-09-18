@@ -27,11 +27,11 @@
 
 
 
-![img](file:///C:\Users\ADMINI~1\AppData\Local\Temp\ksohtml19092\wps37.jpg) 
+![img](image/wps37.jpg) 
 
 ![img](image/wps38.jpg) 
 
-数据：![img](file:///C:\Users\ADMINI~1\AppData\Local\Temp\ksohtml19092\wps39.jpg)
+数据：![img](image/wps39.jpg)
 
 ## 学生表
 
