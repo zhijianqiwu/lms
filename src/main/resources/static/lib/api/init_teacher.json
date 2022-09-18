@@ -1,0 +1,32 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "teacher/welcome"
+
+  },
+  "logoInfo": {
+    "title": "教学管理系统",
+    "image": "lib/images/xiaohui.jpg",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "教学管理",
+          "href": "teacher/lessonList",
+          "icon": "fa fa-home",
+          "target": "_self"
+        },
+        {
+          "title": "成绩管理",
+          "href": "teacher/gradeList",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        }
+      ]}
+  ]}

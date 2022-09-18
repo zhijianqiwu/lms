@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.dao.StudentDao">
+
+    <select id="selectList" resultType="com.school.domain.Student" parameterType="com.school.pojo.StudentSelect">
+    select * from student
+    <where>
+        <if test="sno!=null">
+            sno=#{sno}
+        </if>
+        <if test="sname!=null">
+            sname like '%' #{sname} '%'
+        </if>
+        <if test="dno!=null">
+            dno=#{dno}
+        </if>
+        <if test="sclass!=null">
+            sclass=#{sclass}
+        </if>
+    </where>
+     limit #{start},#{limit}
+    </select>
+
+    <select id="selectList" resultType="Long" parameterType="com.school.pojo.StudentSelect">
+        select * from student
+        <where>
+            <if test="sno!=null">
+                sno=#{sno}
+            </if>
+            <if test="sname!=null">
+                sname like '%' #{sname} '%'
+            </if>
+            <if test="dno!=null">
+                dno=#{dno}
+            </if>
+            <if test="sclass!=null">
+                sclass=#{sclass}
+            </if>
+        </where>
+        limit #{start},#{limit}
+    </select>
+
+
+</mapper>

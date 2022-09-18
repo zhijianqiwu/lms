@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>授课</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/css/layuimini.css?v=2.0.4.2}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/css/themes/default.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+
+    <style>
+
+        .div-content{
+            background-color:white;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .table-search-fieldset{
+            margin: 0;
+            border: 1px solid #e6e6e6;
+            padding:10px 20px 5px 20px;
+            color: #6b6b6b;
+        }
+    </style>
+</head>
+<body>
+<div class="div-content">
+    <form class="layui-form layui-form-pane" action="">
+
+        <fieldset class="table-search-fieldset">
+            <div class="layui-form-item">
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">授课编号</label>
+                    <div class="layui-input-inline" style="width: 160px;">
+                        <input type="text" name="lno" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">课程</label>
+                    <div class="layui-input-block" >
+                        <select name="cno" lay-verify="" lay-search>
+                            <option value=""></option>
+                            <option th:each="course:${courseList}"  th:value="${course.getCno()}">
+                                <span th:text="${course.getCname()}"></span>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">讲授教室</label>
+                    <div class="layui-input-block" >
+                        <select name="rno" lay-verify="" lay-search>
+                            <option value=""></option>
+                            <option th:each="room:${roomList}"  th:value="${room.getRno()}">
+                                <span th:text="${room.getRname()}"></span>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">授课周数</label>
+                    <div class="layui-input-block" style="width: 160px;">
+                        <select name="csweek" lay-verify="" lay-search>
+                            <option value="" ></option>
+                            <option value="1">1-10周</option>
+                            <option value="2">2-11周</option>
+                            <option value="3">3-12周</option>
+                            <option value="4">4-13周</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">授课时间</label>
+                    <div class="layui-input-block" style="width: 160px;">
+                        <select name="cday" lay-verify="" lay-search>
+                            <option value="" selected></option>
+                            <option value="1">星期一</option>
+                            <option value="2">星期二</option>
+                            <option value="3">星期三</option>
+                            <option value="4">星期四</option>
+                            <option value="5">星期五</option>
+                            <option value="6">星期六</option>
+                            <option value="7">星期日</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">授课节数</label>
+                    <div class="layui-input-block" style="width: 160px;">
+                        <select name="csnumber" lay-verify="" lay-search>
+                            <option value="" selected>请选择</option>
+                            <option value="1">1-4</option>
+                            <option value="5">5-8</option>
+                            <option value="9">9-11</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button id="btn-search" lay-submit lay-filter="btn-search-filter" class="layui-btn layui-btn-radius layui-btn-normal">
+                        <i class="layui-icon layui-icon-search"></i>
+                        搜索</button>
+                    <button id="btn-reset" type="reset" class="layui-btn layui-btn-radius layui-btn-normal">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        清空条件</button>
+                </div>
+
+            </div>
+
+
+        </fieldset>
+    </form>
+    <table id="table-student" lay-filter="table-student-filter"></table>
+
+</div>
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}" charset="utf-8"></script>
+<script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/lib/jq-module/jquery.particleground.min.js}" charset="utf-8"></script>
+
+<!--表格内按钮-->
+<script type="text/html" id="bartool">
+    <a  class="layui-btn layui-btn-danger layui-btn-xs" lay-event="edit" >修改</a>
+</script>
+
+
+<script type="text/html" id="convertCday">
+    {{#
+    if(d.cday=='1'){
+    return '星期一';
+    }else if(d.cday=='2'){
+    return '星期二';
+    }else if(d.cday=='3'){
+    return '星期三';
+    }else if(d.cday=='4'){
+    return '星期四';
+    }else if(d.cday=='5'){
+    return '星期五';
+    }else if(d.cday=='6'){
+    return '星期六';
+    }else if(d.cday=='7'){
+    return '星期日';
+    }else{
+    return '';
+    }
+    }}
+
+</script>
+
+
+<script type="text/html" id="convertCno">
+    {{#
+    return d.cname;
+    }}
+
+</script>
+
+<script type="text/html" id="convertRno">
+    {{#
+    return d.rname;
+    }}
+
+</script>
+<script type="text/html" id="convertNumber">
+    {{#
+    if(d.csnumber=='1'){
+    return '1-4节';
+    }else if(d.csnumber=='5'){
+    return '5-8节';
+    }else if(d.csnumber=='9'){
+    return '9-11节';
+    }else{
+    return '';
+    }
+    }}
+</script>
+<script type="text/html" id="convertWeek">
+    {{#
+    if(d.csweek=='1'){
+    return '1-10周';
+    }else if(d.csweek=='2'){
+    return '2-11周';
+    }else if(d.csweek=='3'){
+    return '3-12周';
+    }else if(d.csweek=='4'){
+    return '4-13周';
+    }else{
+    return '';
+    }
+    }}
+</script>
+<script th:inline="javascript">
+    var ctxPath=[[@{/}]];
+
+        //刷新表格
+        function refreshTable(){
+            $("#btn-reset").click();
+            $("#btn-search").click();
+        }
+
+        layui.use(['table','form'], function(){
+            var table = layui.table;
+            var form = layui.form;
+
+
+            //学生列表表格渲染
+            table.render({
+                elem: '#table-student'
+                ,toolbar:"#tabletoolbar"  //左上角按钮
+                ,url: ctxPath+'teacher/getLesson' //数据接口
+                ,page: true //开启分页
+                ,limits :[5,10,20,30,50]
+                ,cols: [
+                    [ //表头
+                        {type:"checkbox",width: 80},
+                        {field: 'lno', title: '授课编号', width:140,  sort: true }
+                        ,{field: 'cno', title: '课程', width:220,templet:'#convertCno'}
+                        ,{field: 'rno', title: '教室', width:100,templet:'#convertRno'}
+                        ,{field: 'csweek', title: '授课周数', width:100,templet: '#convertWeek'}
+                        ,{field: 'cday', title: '授课时间', width:100,templet:'#convertCday'}
+                        ,{field: 'csnumber', title: '授课节数',templet:'#convertNumber'}
+                        ,{title: '操作',toolbar:'#bartool'}
+                    ]
+                ]
+            });
+
+            //监听表格上方查询表单提交
+            form.on('submit(btn-search-filter)',function(data){
+                console.log(data.field);
+                //刷新表格
+                table.reload('table-student', {
+                    where: { //设定异步数据接口的额外参数，任意设
+                        lno:data.field.lno,
+                        cno:data.field.cno,
+                        rno:data.field.rno,
+                        csweek:data.field.csweek,
+                        cday:data.field.cday,
+                        csnumber:data.field.csnumber,
+                    }
+                    ,page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                }); //只重载数据
+                return false;//阻止跳转。如果需要表单跳转就去掉
+            })
+
+            //表格内的 修改 事件
+            table.on('tool(table-student-filter)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+                if(layEvent == 'edit'){ //编辑
+                    layer.open({
+                        type: 2,
+                        title:'修改授课',
+                        area:['90%','90%'],
+                        content:ctxPath + "teacher/getLesson/"+data.lno //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    });
+
+                }
+            });
+
+        });
+
+</script>
+</body>
+</html>

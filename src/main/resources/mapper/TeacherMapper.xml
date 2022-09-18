@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lms.mapper.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.lms.pojo.Teacher" >
+    <id column="tno" property="tno" jdbcType="CHAR" />
+    <result column="tname" property="tname" jdbcType="VARCHAR" />
+    <result column="tsex" property="tsex" jdbcType="CHAR" />
+    <result column="tage" property="tage" jdbcType="INTEGER" />
+    <result column="tpass" property="tpass" jdbcType="VARCHAR" />
+    <result column="dno" property="dno" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    tno, tname, tsex, tage, tpass, dno
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lms.pojo.TeacherExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from teacher
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from teacher
+    where tno = #{tno,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from teacher
+    where tno = #{tno,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lms.pojo.TeacherExample" >
+    delete from teacher
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lms.pojo.Teacher" >
+    insert into teacher (tno, tname, tsex, tage, 
+      tpass, dno)
+    values (#{tno,jdbcType=CHAR}, #{tname,jdbcType=VARCHAR}, #{tsex,jdbcType=CHAR}, #{tage,jdbcType=INTEGER}, 
+      #{tpass,jdbcType=VARCHAR}, #{dno,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lms.pojo.Teacher" >
+    insert into teacher
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tno != null" >
+        tno,
+      </if>
+      <if test="tname != null" >
+        tname,
+      </if>
+      <if test="tsex != null" >
+        tsex,
+      </if>
+      <if test="tage != null" >
+        tage,
+      </if>
+      <if test="tpass != null" >
+        tpass,
+      </if>
+      <if test="dno != null" >
+        dno,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tno != null" >
+        #{tno,jdbcType=CHAR},
+      </if>
+      <if test="tname != null" >
+        #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="tsex != null" >
+        #{tsex,jdbcType=CHAR},
+      </if>
+      <if test="tage != null" >
+        #{tage,jdbcType=INTEGER},
+      </if>
+      <if test="tpass != null" >
+        #{tpass,jdbcType=VARCHAR},
+      </if>
+      <if test="dno != null" >
+        #{dno,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lms.pojo.TeacherExample" resultType="java.lang.Integer" >
+    select count(*) from teacher
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update teacher
+    <set >
+      <if test="record.tno != null" >
+        tno = #{record.tno,jdbcType=CHAR},
+      </if>
+      <if test="record.tname != null" >
+        tname = #{record.tname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tsex != null" >
+        tsex = #{record.tsex,jdbcType=CHAR},
+      </if>
+      <if test="record.tage != null" >
+        tage = #{record.tage,jdbcType=INTEGER},
+      </if>
+      <if test="record.tpass != null" >
+        tpass = #{record.tpass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dno != null" >
+        dno = #{record.dno,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update teacher
+    set tno = #{record.tno,jdbcType=CHAR},
+      tname = #{record.tname,jdbcType=VARCHAR},
+      tsex = #{record.tsex,jdbcType=CHAR},
+      tage = #{record.tage,jdbcType=INTEGER},
+      tpass = #{record.tpass,jdbcType=VARCHAR},
+      dno = #{record.dno,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lms.pojo.Teacher" >
+    update teacher
+    <set >
+      <if test="tname != null" >
+        tname = #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="tsex != null" >
+        tsex = #{tsex,jdbcType=CHAR},
+      </if>
+      <if test="tage != null" >
+        tage = #{tage,jdbcType=INTEGER},
+      </if>
+      <if test="tpass != null" >
+        tpass = #{tpass,jdbcType=VARCHAR},
+      </if>
+      <if test="dno != null" >
+        dno = #{dno,jdbcType=CHAR},
+      </if>
+    </set>
+    where tno = #{tno,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lms.pojo.Teacher" >
+    update teacher
+    set tname = #{tname,jdbcType=VARCHAR},
+      tsex = #{tsex,jdbcType=CHAR},
+      tage = #{tage,jdbcType=INTEGER},
+      tpass = #{tpass,jdbcType=VARCHAR},
+      dno = #{dno,jdbcType=CHAR}
+    where tno = #{tno,jdbcType=CHAR}
+  </update>
+</mapper>

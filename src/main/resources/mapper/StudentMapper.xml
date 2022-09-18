@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lms.mapper.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.lms.pojo.Student" >
+    <id column="sno" property="sno" jdbcType="CHAR" />
+    <result column="sname" property="sname" jdbcType="VARCHAR" />
+    <result column="ssex" property="ssex" jdbcType="CHAR" />
+    <result column="sage" property="sage" jdbcType="INTEGER" />
+    <result column="spass" property="spass" jdbcType="VARCHAR" />
+    <result column="dno" property="dno" jdbcType="CHAR" />
+    <result column="sclass" property="sclass" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    sno, sname, ssex, sage, spass, dno, sclass
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lms.pojo.StudentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where sno = #{sno,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from student
+    where sno = #{sno,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lms.pojo.StudentExample" >
+    delete from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lms.pojo.Student" >
+    insert into student (sno, sname, ssex, sage, 
+      spass, dno, sclass)
+    values (#{sno,jdbcType=CHAR}, #{sname,jdbcType=VARCHAR}, #{ssex,jdbcType=CHAR}, #{sage,jdbcType=INTEGER}, 
+      #{spass,jdbcType=VARCHAR}, #{dno,jdbcType=CHAR}, #{sclass,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lms.pojo.Student" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sno != null" >
+        sno,
+      </if>
+      <if test="sname != null" >
+        sname,
+      </if>
+      <if test="ssex != null" >
+        ssex,
+      </if>
+      <if test="sage != null" >
+        sage,
+      </if>
+      <if test="spass != null" >
+        spass,
+      </if>
+      <if test="dno != null" >
+        dno,
+      </if>
+      <if test="sclass != null" >
+        sclass,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sno != null" >
+        #{sno,jdbcType=CHAR},
+      </if>
+      <if test="sname != null" >
+        #{sname,jdbcType=VARCHAR},
+      </if>
+      <if test="ssex != null" >
+        #{ssex,jdbcType=CHAR},
+      </if>
+      <if test="sage != null" >
+        #{sage,jdbcType=INTEGER},
+      </if>
+      <if test="spass != null" >
+        #{spass,jdbcType=VARCHAR},
+      </if>
+      <if test="dno != null" >
+        #{dno,jdbcType=CHAR},
+      </if>
+      <if test="sclass != null" >
+        #{sclass,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lms.pojo.StudentExample" resultType="java.lang.Integer" >
+    select count(*) from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update student
+    <set >
+      <if test="record.sno != null" >
+        sno = #{record.sno,jdbcType=CHAR},
+      </if>
+      <if test="record.sname != null" >
+        sname = #{record.sname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ssex != null" >
+        ssex = #{record.ssex,jdbcType=CHAR},
+      </if>
+      <if test="record.sage != null" >
+        sage = #{record.sage,jdbcType=INTEGER},
+      </if>
+      <if test="record.spass != null" >
+        spass = #{record.spass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dno != null" >
+        dno = #{record.dno,jdbcType=CHAR},
+      </if>
+      <if test="record.sclass != null" >
+        sclass = #{record.sclass,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update student
+    set sno = #{record.sno,jdbcType=CHAR},
+      sname = #{record.sname,jdbcType=VARCHAR},
+      ssex = #{record.ssex,jdbcType=CHAR},
+      sage = #{record.sage,jdbcType=INTEGER},
+      spass = #{record.spass,jdbcType=VARCHAR},
+      dno = #{record.dno,jdbcType=CHAR},
+      sclass = #{record.sclass,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lms.pojo.Student" >
+    update student
+    <set >
+      <if test="sname != null" >
+        sname = #{sname,jdbcType=VARCHAR},
+      </if>
+      <if test="ssex != null" >
+        ssex = #{ssex,jdbcType=CHAR},
+      </if>
+      <if test="sage != null" >
+        sage = #{sage,jdbcType=INTEGER},
+      </if>
+      <if test="spass != null" >
+        spass = #{spass,jdbcType=VARCHAR},
+      </if>
+      <if test="dno != null" >
+        dno = #{dno,jdbcType=CHAR},
+      </if>
+      <if test="sclass != null" >
+        sclass = #{sclass,jdbcType=CHAR},
+      </if>
+    </set>
+    where sno = #{sno,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lms.pojo.Student" >
+    update student
+    set sname = #{sname,jdbcType=VARCHAR},
+      ssex = #{ssex,jdbcType=CHAR},
+      sage = #{sage,jdbcType=INTEGER},
+      spass = #{spass,jdbcType=VARCHAR},
+      dno = #{dno,jdbcType=CHAR},
+      sclass = #{sclass,jdbcType=CHAR}
+    where sno = #{sno,jdbcType=CHAR}
+  </update>
+
+
+
+
+
+
+  <!--自己添加的
+  //查询学生，学生里有院系名称
+    List<StudentMore> selectsMore();
+
+<resultMap id="studentMore" type="com.lms.pojo.StudentMore">
+</resultMap>
+   <select id="selectsMore" resultMap="studentMore" >
+   select * from student a left join department b on a.dno=b.dno
+  </select>
+  -->
+
+
+
+</mapper>

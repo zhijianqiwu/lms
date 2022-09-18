@@ -1,0 +1,51 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "student/welcome"
+  },
+  "logoInfo": {
+    "title": "教学管理系统",
+    "image": "lib/images/xiaohui.jpg",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "选课管理",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "查看已选课表",
+              "href": "student/lessonList",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "退选课程",
+              "href": "student/deleteList",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "选修课程",
+              "href": "student/takeList",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "查看成绩",
+          "href": "student/gradeList",
+          "icon": "fa fa-navicon",
+          "target": "_self"
+        }
+      ]}
+  ]}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/css/layuimini.css?v=2.0.4.2}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/css/themes/default.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+</head>
+<body>
+<h1 >欢迎登录,<span th:text="${session.teacher.getTname()}"></span></h1>
+
+</body>
+</html>

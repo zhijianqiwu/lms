@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>用户资料</title>
+  <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all">
+  <link rel="stylesheet" th:href="@{/lib/css/layuimini.css?v=2.0.4.2}" media="all">
+  <link rel="stylesheet" th:href="@{/lib/css/themes/default.css}" media="all">
+  <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+
+</head>
+<body>
+
+<form class="layui-form" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">编号</label>
+    <div class="layui-input-block">
+      <input type="number" th:field="${session.admin.getAno()}" name="ano" required  lay-verify="required|number"  autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">姓名</label>
+    <div class="layui-input-block">
+      <input type="text" name="aname"  th:field="${session.admin.getAname()}"  required  lay-verify="required"  autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+
+</form>
+
+</body>
+</html>

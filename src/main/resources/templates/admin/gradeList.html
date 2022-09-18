@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>学生成绩管理</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/css/layuimini.css?v=2.0.4.2}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/css/themes/default.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+
+    <style>
+
+        .div-content{
+            background-color:white;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .table-search-fieldset{
+            margin: 0;
+            border: 1px solid #e6e6e6;
+            padding:10px 20px 5px 20px;
+            color: #6b6b6b;
+        }
+    </style>
+</head>
+<body>
+<div class="div-content">
+    <form class="layui-form layui-form-pane" action="">
+
+        <fieldset class="table-search-fieldset">
+            <div class="layui-form-item">
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">学生学号</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="sno" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">授课编号</label>
+                    <div class="layui-input-inline" style="width: 160px;">
+                        <input type="text" name="lno" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+
+                <div class="layui-inline">
+                    <button id="btn-search" lay-submit lay-filter="btn-search-filter" class="layui-btn layui-btn-radius layui-btn-normal">
+                        <i class="layui-icon layui-icon-search"></i>
+                        搜索</button>
+                    <button id="btn-reset" type="reset" class="layui-btn layui-btn-radius layui-btn-normal">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        清空条件</button>
+                </div>
+
+            </div>
+
+
+        </fieldset>
+    </form>
+    <table id="table-student" lay-filter="table-student-filter"></table>
+
+</div>
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}" charset="utf-8"></script>
+<script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/lib/jq-module/jquery.particleground.min.js}" charset="utf-8"></script>
+
+
+
+<!--表格上的按钮-->
+<script type="text/html" id="tabletoolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">批量删除</button>
+    </div>
+</script>
+
+<!--表格内按钮-->
+<script type="text/html" id="bartool">
+    <a  class="layui-btn layui-btn-xs" lay-event="del"  >删除</a>
+    <a  class="layui-btn layui-btn-danger layui-btn-xs" lay-event="edit" >编辑</a>
+</script>
+
+<script th:inline="javascript">
+    var ctxPath=[[@{/}]];
+
+        //刷新表格
+        function refreshTable(){
+            $("#btn-reset").click();
+            $("#btn-search").click();
+        }
+
+        layui.use(['table','form'], function(){
+            var table = layui.table;
+            var form = layui.form;
+
+            //表格头部工具栏监听 添加 批量删除
+            table.on('toolbar(table-student-filter)', function(obj){
+                if(obj.event=='add'){  //增加
+                    layer.open({
+                        type: 2,
+                        title:'新增选课',
+                        area:['90%','90%'],
+                        content: ctxPath+'admin/gradeAdd'
+                    });
+                }else if(obj.event=='delete'){  //删除
+                    var checkStatus = table.checkStatus('table-student');
+                    //如果没有选中任何数据
+                    if(checkStatus.data.length==0){
+                        layer.alert("请至少选择一个", {icon: 7,title:"警告"});
+                        return false;
+                    }
+                    var idArr =new Array();
+                    $(checkStatus.data).each(function(){
+                        idArr.push(this.sno);
+                        idArr.push(this.lno);
+                    });
+
+                    layer.confirm('是否确定删除?', {icon: 3, title:'提示'}, function(index){
+                        //异步请求删除 结果提示 刷新表格
+                        var url=ctxPath + "admin/deleteGrades/"+idArr.join(",");
+                        var params ={
+                            _method:"DELETE"
+                        }
+                        $.post(url,params,function(response){
+                            if(response.code==0){
+                                layer.msg(response.message,{icon:5,time:1000},function() {
+                                    refreshTable();
+                                });
+                            }else{
+                                layer.msg(response.message,{icon:2,time:1000}, function () {
+                                });
+                            }
+
+                        })
+                        layer.close(index);
+                    });
+                }
+            });
+
+            //学生列表表格渲染
+            table.render({
+                elem: '#table-student'
+                ,toolbar:"#tabletoolbar"  //左上角按钮
+                ,url: ctxPath+'admin/getGrade' //数据接口
+                ,page: true //开启分页
+                ,limits :[5,10,20,30,50]
+                ,cols: [
+                    [ //表头
+                        {type:"checkbox",width: 100},
+                        {field: 'sno', title: '学生学号', width:120,  sort: true }
+                        ,{field: 'lno', title: '授课编号', width:180,  sort: true}
+                        ,{field: 'score', title: '分数', width:100 , sort: true}
+                        ,{title: '操作',toolbar:'#bartool'}
+                    ]
+                ]
+            });
+
+            //监听表格上方查询表单提交
+            form.on('submit(btn-search-filter)',function(data){
+                console.log(data.field);
+                //刷新表格
+                table.reload('table-student', {
+                    where: { //设定异步数据接口的额外参数，任意设
+                        sno:data.field.sno,
+                        lno:data.field.lno,
+                    }
+                    ,page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                }); //只重载数据
+                return false;//阻止跳转。如果需要表单跳转就去掉
+            })
+
+            //表格内的 删除更新 事件
+            table.on('tool(table-student-filter)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+                if(layEvent == 'del'){ //删除
+                    layer.confirm('是否确定删除?'+data.sno+"/"+data.lno, {icon: 3, title:'提示'}, function(index){
+                        //异步请求删除 结果提示 刷新表格
+                        var url=ctxPath + "admin/deleteGrades/"+data.sno+","+data.lno;
+                        var params ={
+                            _method:"DELETE"
+                        }
+                        $.post(url,params,function(response){
+                            if(response.code==0){
+                                layer.msg(response.message,{icon:7 ,time:1000}, function () {
+                                    refreshTable();
+                                });
+                            }else{
+                                layer.msg(response.message,{icon:2,time:1000}, function () {
+                                });
+                            }
+                        })
+
+                        layer.close(index);
+                    });
+
+                } else if(layEvent == 'edit'){ //编辑
+                    layer.open({
+                        type: 2,
+                        title:'修改分数',
+                        area:['90%','90%'],
+                        content:ctxPath + "admin/getGrade/"+data.sno+"/"+data.lno //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    });
+
+                }
+            });
+
+        });
+
+</script>
+</body>
+</html>

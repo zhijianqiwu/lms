@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>修改学生</title>
+  <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all">
+  <link rel="stylesheet" th:href="@{/lib/css/layuimini.css?v=2.0.4.2}" media="all">
+  <link rel="stylesheet" th:href="@{/lib/css/themes/default.css}" media="all">
+  <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+
+</head>
+<body>
+
+<form class="layui-form" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">学号:</label>
+    <div class="layui-input-block">
+      <input type="number"  th:field="${student.sno}"  name="sno" required="required"  lay-verify="required|number" placeholder="请输入学号" autocomplete="off" class="layui-disabled">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">姓名:</label>
+    <div class="layui-input-block">
+      <input type="text" th:field="${student.sname}" name="sname" required="required"  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">性别:</label>
+    <div class="layui-input-block">
+      <input type="radio" th:field="${student.ssex}" name="ssex" value="男" title="男" >
+      <input type="radio" th:field="${student.ssex}" name="ssex" value="女" title="女" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">年龄:</label>
+    <div class="layui-input-block">
+      <input type="number" th:field="${student.sage}" name="sage" required="required" lay-verify="number" placeholder="请输入年龄" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">学院</label>
+    <div class="layui-input-block">
+      <select name="dno" th:field="${student.dno}"   lay-verify="" lay-search>
+        <option value="">请选择</option>
+        <option th:each="department:${departmentList}"  th:value="${department.getDno()}">
+          <span th:text="${department.getDname()}"></span>
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">班级</label>
+    <div class="layui-input-block">
+      <select name="sclass" th:field="${student.sclass}"  lay-verify="" lay-search>
+        <option value=""></option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button id="btn-submit" class="layui-btn" lay-submit lay-filter="addemp-filter">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+
+</form>
+
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}" charset="utf-8"></script>
+<script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+<script th:src="@{/lib/jq-module/jquery.particleground.min.js}" charset="utf-8"></script>
+<script th:inline="javascript">
+
+  var ctxPath=[[@{/}]];
+
+    layui.use(['table','form'], function(){
+      var table = layui.table;
+      var form = layui.form;
+
+      form.on('submit(addemp-filter)', function(data){
+        $("#btn-submit").attr("disabled", "disabled").addClass("layui-btn-disabled");
+        //异步提交请求
+        var url = ctxPath+"admin/updateStudent";
+       // alert(data.field.sno);
+        $.post(url,data.field,function(response){
+          if(response.code==0){
+            layer.msg(response.message,{icon:6,time:1000}, function () {
+              //刷新表格
+              parent.refreshTable();
+              //当你在iframe页面关闭自身时
+              var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+              parent.layer.close(index); //再执行关闭
+
+            });
+          }
+          else {
+            $("#btn-submit").removeAttr("disabled", "disabled").removeClass("layui-btn-disabled");
+            layer.msg(response.message,{icon:5,time:1000});
+          }
+
+        });
+
+        return false;
+      });
+
+
+    });
+
+</script>
+</body>
+</html>
